@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RailwayStation.Models;
 using System;
@@ -233,6 +234,46 @@ namespace RailwayStation
                 int sum = context.Workers.Where(w => w.Station!.Station_name == "Західна")
                        .Sum(w => w.Salary);
                 Console.WriteLine(sum);
+            }
+        }
+
+        static public void Tracking(DbContextOptions commands)
+        {
+            using (RailwayStationContext context = new RailwayStationContext(commands))
+            {
+                var pas1 = context.Passenger.FirstOrDefault();
+                var pas2 = context.Passenger.AsNoTracking().FirstOrDefault();
+
+                if (pas1 != null && pas2 != null)
+                {
+                    Console.WriteLine($"Before pas1: {pas1.Age}   pas2: {pas2.Age}");
+
+                    pas1.Age = 25;
+
+                    Console.WriteLine($"After pas1: {pas1.Age}   pas2: {pas2.Age}");
+                }
+
+            }
+        }
+        static public void StoredFunc(DbContextOptions commands)
+        {
+            using (RailwayStationContext context = new RailwayStationContext(commands))
+            {
+                SqlParameter param = new SqlParameter("@age", 19);
+                var passengers = context.Passenger.FromSqlRaw("SELECT * FROM GetPassAge (@age)", param).ToList();
+                foreach (var passenger in passengers)
+                    Console.WriteLine($"{passenger.Name} - {passenger.Age}");
+            }
+        }
+
+        static public void StoredProc(DbContextOptions commands)
+        {
+            using (RailwayStationContext context = new RailwayStationContext(commands))
+            {
+                SqlParameter param = new("@name", "Західна");
+                var workers = context.Workers.FromSqlRaw("GetWorkersbyStation @name", param).ToList();
+                foreach (var worker in workers)
+                    Console.WriteLine($"{worker.Name} {worker.Last_name}");
             }
         }
     }

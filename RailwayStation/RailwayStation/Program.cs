@@ -31,6 +31,10 @@ using (RailwayStationContext context = new (commands))
     ////foreach (var passenger in context.Passenger)
     ////    Console.WriteLine(passenger.Name + ' ' + passenger.Last_name + ' ' + passenger.Personal_document);
 
-    Inquiry(commands);
+    //Inquiry(commands);
+    //Tracking(commands);
 
+    //StoredFunc(commands);
+
+    StoredProc(commands);
 }

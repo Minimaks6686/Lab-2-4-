@@ -20,6 +20,8 @@ namespace RailwayStation
         public DbSet<Waybil> Waybils { get; set; } = null!;
         public DbSet<Worker> Workers { get; set; } = null!;
         public DbSet<Passenger> Passenger { get; set; } = null!;
+        public DbSet<Railway_journey> Railway_Journeys { get; set; } = null!;
+        public DbSet<Train> Trains { get; set; } = null!;
 
         public RailwayStationContext(DbContextOptions commands) : base(commands)
         {
@@ -95,9 +97,9 @@ namespace RailwayStation
             optionsBuilder.UseSqlServer(connect!);
 
            // optionsBuilder
-           //.UseLazyLoadingProxies()        
+           //.UseLazyLoadingProxies()
            //.UseSqlServer(connect!);
-
+ 
 
         }
     }

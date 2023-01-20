@@ -14,7 +14,7 @@ namespace RailwayStation.Models
         public int Id { get; set; }
         public int Number { get; set; }
         [Required]
-        public string? Type { get; set; }
+        public string Type { get; set; }
         public int Seat_amount { get; set; } = 54;
         public int Seat_occupied { get; set; } = 0;
         

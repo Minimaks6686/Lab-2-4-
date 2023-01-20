@@ -2,39 +2,26 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using static RailwayStation.Commands;
-
-
-
-
-
+using RailwayStation.Models;
 
 
 var commandsBuilder = new DbContextOptionsBuilder<RailwayStationContext>();
 var commands = commandsBuilder.Options;
-using (RailwayStationContext context = new (commands))
+
+
+//Асинхронно додати 99 станцій у 3 потоки
+async Task AddStationsAsync(int k)
 {
-
-    //foreach (var station in context.Stations)
-    //    Console.WriteLine(station.Address);
-
-    //Console.WriteLine(new String('+', 20));
-
-    //foreach (var worker in context.Workers)
-    //    Console.WriteLine(worker.Name + ' ' + worker.Last_name);
-
-    //Console.WriteLine(new String('+', 20));
-
-    //Navigation(commands);
-
-    ////Console.WriteLine(new String('+', 20));
-
-    ////foreach (var passenger in context.Passenger)
-    ////    Console.WriteLine(passenger.Name + ' ' + passenger.Last_name + ' ' + passenger.Personal_document);
-
-    //Inquiry(commands);
-    //Tracking(commands);
-
-    //StoredFunc(commands);
-
-    StoredProc(commands);
+    using RailwayStationContext context = new(commands);
+    for (int i = k; i < k + 33; i++)
+    {
+        await context.Stations.AddAsync(new Station { Address = "Address " + i, Station_name = "Station_name " + i });
+    }
+    await context.SaveChangesAsync();
 }
+
+using RailwayStationContext context = new(commands);
+var Add1 = AddStationsAsync(0);
+var Add2 = AddStationsAsync(33);
+var Add3 = AddStationsAsync(66);
+await Task.WhenAll(Add1, Add2, Add3);
